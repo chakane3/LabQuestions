@@ -27,7 +27,17 @@ class LabQuestionsController: UIViewController {
     }
     
     private func loadQuestions() {
-        // TODO: create API client
+        LabQuestionsAPIClient.fetchQuestions { [weak self] result in
+            switch result {
+            case .failure(let appError):
+                DispatchQueue.main.async {
+                    self?.showAlert(title: "App error", message: "\(appError)")
+                }
+                
+            case .success(let questions):
+                self?.questions = questions
+            }
+        }
     }
 }
 
